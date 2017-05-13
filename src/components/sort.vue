@@ -2,13 +2,6 @@
     <div class="sort-page">
         <v-about  header-title="全站文集"></v-about>
         <v-header></v-header>
-        <Modal
-            v-model="modal1"
-            title="新建文集"
-            @on-ok="ok"
-            @on-cancel="cancel">
-            <input type="text" placeholder="文集名">
-        </Modal>
         <ul class="sort-content">
             <li class="sort-list" v-for="item in dataList.data">
                 <router-link to="/article">

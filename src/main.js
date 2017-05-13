@@ -4,7 +4,7 @@ import Axios from 'axios'
 import App from './App.vue'
 import store from './vuex'
 import iView from 'iView'
-import VueSimplemde from 'vue-simplemde'
+import VueHtml5Editor from 'vue-html5-editor'
 
 import './assets/css/font-awesome.css'
 import './assets/css/reset.css'
@@ -15,7 +15,7 @@ import routes from './routers/routers'
 
 Vue.use(VueRouter)
 Vue.use(iView)
-Vue.use(VueSimplemde)
+Vue.use(VueHtml5Editor);
 Vue.prototype.$http = Axios
 
 

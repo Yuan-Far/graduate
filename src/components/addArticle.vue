@@ -11,24 +11,19 @@
 	        </div>
     	</div>
     	<div class="addInfoTitle">
-    		<input type="text" placeholder="请输入标题">
+    		<input type="text" placeholder="请输入标题" v-model="article_name">
     	</div>
-        <markdown-editor :configs="configs" ref="markdownEditor"></markdown-editor>
+        <vue-html5-editor :content="content" @change="updateData" :height="500"></vue-html5-editor>
     </div>
 </template>
 <script type="text/javascript">
-import { markdownEditor } from 'vue-simplemde'
 export default {
     data() {
     	return {
-    		configs: {
-    			renderingConfig: {
-	          		codeSyntaxHighlighting: false, // 开启代码高亮
-	        	},
-	        	previewRender: function(plainText) {
-		          	return customMarkdownParser(plainText) // 返回HTML自定义解析器
-		        }
-    		}
+    		content: '',
+    		article_name:'',
+    		pic: '',
+    		author: ''
     	}
     },
     methods: {
@@ -36,7 +31,26 @@ export default {
             history.go(-1)
         },
         release() {
-        	console.log(this.configs.previewRender(this.$refs.markdownEditor.simplemde.value()));
+        	let obj = {
+        		title: this.article_name,
+        		pic: this.pic,
+        		content: this.content,
+        		author: this.author
+        	}
+        	this.$http.post('/api/create_article', obj)
+                .then((res)=>{
+                    if(res.data.code===1){
+                        this.$Message.info('创建成功');
+                    }else {
+                        this.$Message.error('创建失败');
+                    }
+                },(err)=>{
+                    this.$Message.error('创建失败');
+                })
+        },
+        updateData: function (data) {
+            // sync content to component
+            this.content = data
         }
     }
 }
@@ -85,28 +99,8 @@ export default {
 	            }
 	        }
 		}
-	}
-	.markdown-editor {
-		.CodeMirror {
-			width: 100%;
-			min-height: 566px !important;
-			text-align: left !important;
-		}
-		.editor-toolbar {
-			position: fixed !important;
-			z-index: 9;
-			width: 100%;
-			border: none !important;
-			border-top: 1px solid #eee;
-			background: #f1f1f1;
-			bottom: 0;
-			a {
-				width: 28px !important;
-				height: 28px !important;
-			}
-		}
-		.editor-statusbar {
-			display: none;
-		}
+		.content{
+			margin-top:0 !important;
+		} 
 	}
 </style>
