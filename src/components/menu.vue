@@ -11,7 +11,7 @@
                         <img src="../assets/images/pic.jpg">
                     </div>
                     <div class="login_middle">
-                        <p>呆呆萌</p>
+                        <p>{{username}}</p>
                     </div>
                     <div class="login_right">
                         <i class="fa fa-angle-right"></i>
@@ -68,14 +68,26 @@
 
 <script>
 import { mapState } from 'vuex'
+import jwt from 'jwt-decode'
 import vHeader from './header.vue'
 export default {
     name: 'v-menu',
+    created(){
+        const userInfo = this.getUserInfo()
+        if(userInfo != null){
+            this.id = userInfo.id;
+            this.username = userInfo.name
+        }else {
+            this.id = '';
+            this.username = '';
+        }
+    },
     components: {
         vHeader
     },
     data() {
         return {
+            username:'',
             dataAbout: [{
                 'link': '/aboutCollection',
                 'icon': 'fa-heart',
@@ -102,6 +114,17 @@ export default {
     methods: {
         isShow() {
             this.$store.commit('UPDATE_MENUSHOW');
+        },
+        getUserInfo() {
+            const token = window.sessionStorage.getItem('Yuan-Token')
+            // console.log(token)
+            if(token !=null && token!='null'){
+                const decode = jwt(token);
+                // console.log(decode)
+                return decode;
+            }else {
+                return null
+            }
         }
     },
     computed: {

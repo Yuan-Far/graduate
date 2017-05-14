@@ -1,6 +1,6 @@
 <template lang="html">
 	<div class="login_page">
-		<div class="close_icon"><i class="fa fa-remove" aria-hidden="true"></i></div>
+		<!-- <div class="close_icon"><i class="fa fa-remove" aria-hidden="true"></i></div> -->
 		<div class="login_wrapper">
 			<img src="../assets/images/ico.png">
 		</div>
@@ -53,10 +53,12 @@ export default {
 						// 	type: 'success',
 						// 	message: '登陆成功'
 						// })
+						this.$Message.info('登陆成功');
 						this.$router.push('/about')
 					}else{
 						//登陆失败清空token
 						// console.log(res.data.msg)
+						this.$Message.error('登陆失败');
 						sessionStorage.setItem('Yuan-Token', null)
 					}
 				},(err)=> {

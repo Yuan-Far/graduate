@@ -4,6 +4,7 @@ import Axios from 'axios'
 import App from './App.vue'
 import store from './vuex'
 import iView from 'iView'
+// import jwt from 'jsonwebtoken'
 import VueHtml5Editor from 'vue-html5-editor'
 
 import './assets/css/font-awesome.css'
@@ -25,7 +26,7 @@ Vue.config.productionTip = false
 const router = new VueRouter({
     routes
 })
-/*router.beforeEach((to, from, next)=>{
+router.beforeEach((to, from, next)=>{
 	const token = sessionStorage.getItem('Yuan-Token')
 	if(to.path === '/login'){
 		if(token !== null && token !== 'null' && token !== 'undefined'){
@@ -37,12 +38,13 @@ const router = new VueRouter({
 		next()
 	}else {
 		if(token !== null && token !== 'null' && token !== 'undefined') {
+			// Vue.prototype.$http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 			next()
 		}else{
 			next('/login')
 		}
 	}
-})*/
+})
 new Vue({
   el: '#app',
   router,

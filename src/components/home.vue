@@ -54,28 +54,30 @@ export default {
     components: {
         vHeader
     },
+    created() {
+        this.getArticleList()
+    },
     data(){
         return {
             value:0,
-            dataList: [
-                {
-                    'title': "这是一个标题",
-                    'summary': "这是一段简介",
-                    'author': "Yuan",
-                    'category': "Code",
-                    'pic': "assets/images/code_icon.png",
-                },
-                {
-                    'title': "这是一个标题",
-                    'summary': "这是一段简介",
-                    'author': "Yuan",
-                    'category': "Code",
-                    'pic': "../conf-test/src/assets/images/code_icon.png",
-                }
-            ]
+            dataList: []
         }
     },
-    methods: {}
+    methods: {
+        getArticleList() {
+            this.$http.get('/api/article_info')
+                .then((res)=>{
+                    if(res.status==200){
+                        this.dataList = res.data
+                    }else {
+                        this.$Message.error('获取信息失败')
+                    }
+                },(err)=>{
+                    this.$Message.error('获取信息失败')
+                    console.log(err)
+                })
+        }
+    }
 }
 </script>
 
