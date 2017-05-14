@@ -25,7 +25,7 @@ export default {
                 'link': '/sort',
                 'icon': 'fa-home'
             }, {
-                'link': '/aboutList',
+                'link': '/aboutArticle',
                 'icon': 'fa-paper-plane'
             }, {
                 'link': '/about',

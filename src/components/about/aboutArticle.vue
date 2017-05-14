@@ -1,19 +1,25 @@
 <template lang="html">
 <div class="article">
+    <v-header></v-header>
     <v-about header-title="我的文章"></v-about>
     <router-link to="/addArticle">
         <div class="article-create">
             <i class="ivu-icon ivu-icon-plus"></i>
         </div>
     </router-link>
+    <div class="article-list-info">
+        
+    </div>
 </div>
 </template>
 
 <script>
 import vAbout from './aboutHeader.vue'
+import vHeader from '../header.vue'
 export default {
     components: {
-        vAbout
+        vAbout,
+        vHeader
     }
 }
 </script>
@@ -21,7 +27,7 @@ export default {
 <style lang="less">
 .article-create {
     position: fixed;
-    bottom: 25px;
+    bottom: 75px;
     right: 25px;
     width: 60px;
     height: 60px;

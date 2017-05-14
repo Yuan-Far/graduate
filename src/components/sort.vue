@@ -2,8 +2,30 @@
     <div class="sort-page">
         <v-about  header-title="全站文集"></v-about>
         <v-header></v-header>
+        <!-- <router-link to="/addCategory"> -->
+            <div class="article-create">
+                <i class="ivu-icon ivu-icon-plus" @click="modal = true"></i>
+            </div>
+        <!-- </router-link> -->
+        <Modal
+            v-model="modal"
+            @on-ok="ok"
+            @on-cancel="cancel"
+            title="新建文集">
+            <!-- <Upload
+                multiple
+                type="drag"
+                v-model="upload_img"
+                action="/api/upload_img">
+                <div style="padding: 20px 0">
+                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                    <p>点击这里上传</p>
+                </div>
+            </Upload> -->
+            <input class="sort-name" v-model="category_title" type="text" placeholder="请输入文集名">
+        </Modal>
         <ul class="sort-content">
-            <li class="sort-list" v-for="item in dataList.data">
+            <li class="sort-list" v-for="item in dataList">
                 <router-link to="/article">
                     <div class="sort-hack">
                         <div class="sort-img"><img :src="item.pic" :alt="item.title"></div>
@@ -27,38 +49,85 @@ import vAbout from './about/aboutHeader.vue'
 import vHeader from './header.vue'
 export default {
     name:'v-sort',
+    created() {
+        this.getCategoryList()
+    },
     components: {
         vAbout,
         vHeader
     },
     data() {
         return {
+            'modal': false,
+            'category_title': '',
+            'upload_img': '',
             dataList: {
                 'title': "Code",
-                'data': [
-                    {
-                        'title': "青春",
-                        'author': "Yuan",
-                        'pic': "/static/img/test.2455921.png",
-                        'summary': "this is a summary",
-                        'create_time': "2017-05-05"
-                    },
-                    {
-                        'title': "简介",
-                        'author': "Yuan",
-                        'pic': "/static/img/test.2455921.png",
-                        'summary': "this is a summary",
-                        'create_time': "2017-05-05"
-                    }
-                ]
+                'dataList': []
             }  
         }     
+    },
+    methods: {
+        back() {
+            history.go(-1)
+        },
+        ok () {
+            // this.$Message.info('创建成功');
+            let obj = {
+                title: this.category_title,
+                pic: this.upload_img
+            }
+            this.$http.post('/api/create_category', obj)
+                .then((res)=>{
+                    if(res.data.code===1){
+                        this.$Message.info('创建成功');
+                    }else {
+                        this.$Message.error('创建失败');
+                    }
+                },(err)=>{
+                    this.$Message.error('创建失败');
+                })
+        },
+        cancel () {
+            this.$Message.info('取消创建');
+        },
+        getCategoryList() {
+            this.$http.get('/api/category_info')
+                .then((res)=>{
+                    if(res.status==200){
+                        this.dataList = res.data
+                    }else {
+                        this.$Message.error('获取信息失败')
+                    }
+                },(err)=>{
+                    this.$Message.error('获取信息失败')
+                    console.log(err)
+                })
+        }
     }
 }
 </script>
 
 <style lang="less">
 .sort-page {
+    .article-create {
+    position: fixed;
+    bottom: 75px;
+    right: 25px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 60px;
+    background: #6DACF4;
+    box-shadow: 4px 4px 4px rgba(0,0,0,.4);
+    i {
+        color: #fff;
+        line-height: 60px;
+        font-size: 32px;
+        // box-shadow: 2px 2px 2px rgba(0,0,0,.4);
+    }
+}
     width:100%;
     .sort-wrapper{
         height:50px;
@@ -76,6 +145,7 @@ export default {
         }
     }
     .sort-content {
+        margin-bottom:50px;
         width: 100%;
         color: #000;
         .sort-list {
