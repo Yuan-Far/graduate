@@ -56,7 +56,7 @@ export default {
     },
     created() {
         this.getArticleList()
-        this.getCategoryTitle()
+        // this.getCategoryTitle()
     },
     data(){
         return {
@@ -66,22 +66,22 @@ export default {
         }
     },
     methods: {
-        getCategoryTitle(){
+        // getCategoryTitle(){
             
-            this.$http.get('/api/category_msg'+ category_id)
-                .then((res)=>{
-                    if(res.status==200){
-                        this.title = res.data.title
+        //     this.$http.get('/api/category_msg'+ category_id)
+        //         .then((res)=>{
+        //             if(res.status==200){
+        //                 this.title = res.data.title
 
-                        console.log(this.title)
-                    }else {
-                        this.$Message.error('获取信息失败')
-                    }
-                },(err)=>{
-                    this.$Message.error('获取信息失败')
-                    console.log(err)
-                })
-        },
+        //                 console.log(this.title)
+        //             }else {
+        //                 this.$Message.error('获取信息失败')
+        //             }
+        //         },(err)=>{
+        //             this.$Message.error('获取信息失败')
+        //             console.log(err)
+        //         })
+        // },
         getArticleList() {
             this.$http.get('/api/article_info')
                 .then((res)=>{

@@ -9,21 +9,6 @@
         <Form-item label="邮箱" prop="mail">
             <Input v-model="formValidate.mail" placeholder="请输入邮箱"></Input>
         </Form-item>
-        <Form-item label="选择日期">
-            <Row>
-                <Col span="11">
-                    <Form-item prop="date">
-                        <Date-picker type="date" placeholder="选择日期" v-model="formValidate.date"></Date-picker>
-                    </Form-item>
-                </Col>
-                <Col span="2" style="text-align: center">-</Col>
-                <Col span="11">
-                    <Form-item prop="time">
-                        <Time-picker type="time" placeholder="选择时间" v-model="formValidate.time"></Time-picker>
-                    </Form-item>
-                </Col>
-            </Row>
-        </Form-item>
         <Form-item label="介绍" prop="desc">
             <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
         </Form-item>
@@ -58,12 +43,6 @@ export default {
                     mail: [
                         { required: true, message: '邮箱不能为空', trigger: 'blur' },
                         { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }
-                    ],
-                    date: [
-                        { required: true, type: 'date', message: '请选择日期', trigger: 'change' }
-                    ],
-                    time: [
-                        { required: true, type: 'date', message: '请选择时间', trigger: 'change' }
                     ],
                     desc: [
                         { required: true, message: 'Bug反馈', trigger: 'blur' },

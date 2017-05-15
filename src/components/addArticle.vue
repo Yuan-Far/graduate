@@ -4,7 +4,7 @@
     		<div class="about-title">
 	            <div class="about-wrapper">
 	                <i class="fa fa-angle-left fa-fw" @click="back()"></i>     
-	                <div>  </div>           
+	                <i class="ivu-icon ivu-icon-chevron-down"></i>
 	                <p class="about-name" @click="release()"> 发布 </p>
 	                
 	            </div>

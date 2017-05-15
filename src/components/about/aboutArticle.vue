@@ -9,14 +9,15 @@
     </router-link>
     <div class="article-list-info">
         <ul>
-            <li class="list-article">
-                <div class="article-list-left">
-                    <p class="article-title">test document</p>
-                </div>
-                <div class="article-list-right">
-                    <!-- <img :src="item.pic" :alt="item.title"> -->
-                </div>
+            <li class="list-article" v-for="item in dataList">
+                <router-link :to="{ path: '/article/'+item.article_id }">
+                    <div class="article-list-left">
+                        <p class="article-time">{{item.create_time}}</p>
+                        <h3>{{item.title}}</h3>
+                    </div>
+                </router-link>
             </li>
+            <p>--end--</p>
         </ul>
     </div>
 </div>
@@ -25,14 +26,57 @@
 <script>
 import vAbout from './aboutHeader.vue'
 import vHeader from '../header.vue'
+import jwt from 'jwt-decode'
 export default {
     components: {
         vAbout,
         vHeader
     },
+    created() {
+        const userInfo = this.getUserInfo()
+        if(userInfo != null){
+            this.user_id = userInfo.id;
+            this.username = userInfo.name
+        }else {
+            this.user_id = '';
+            this.username = '';
+        }
+        this.getArticleList()
+    },
     data() {
         return {
+            user_id:'',
             dataList: []
+        }
+    },
+    methods:{
+        getUserInfo() {
+            const token = window.sessionStorage.getItem('Yuan-Token')
+            // console.log(token)
+            if(token !=null && token!='null'){
+                const decode = jwt(token);
+                // console.log(decode)
+                return decode;
+            }else {
+                return null
+            }
+        },
+         getArticleList() {
+            let obj = {
+                user_id: this.user_id
+            }
+            this.$http.get('/api/article_user/'+obj.user_id)
+                .then((res)=>{
+                    if(res.status==200){
+                        this.dataList = res.data.result
+                        // console.log(this.dataList)
+                    }else {
+                        this.$Message.error('获取信息失败')
+                    }
+                },(err)=>{
+                    this.$Message.error('获取信息失败')
+                    console.log(err)
+                })
         }
     }
 }
@@ -55,6 +99,21 @@ export default {
         line-height: 60px;
         font-size: 32px;
         // box-shadow: 2px 2px 2px rgba(0,0,0,.4);
+    }
+}
+.list-article {
+    height: 100px;
+    border-bottom:1px solid #eee;
+    display: flex;
+    align-item:center;
+    .article-list-left {
+        margin: 20px;
+        p{
+            color:#999;
+        }
+        h3{
+            color: #000;
+        }
     }
 }
 </style>
