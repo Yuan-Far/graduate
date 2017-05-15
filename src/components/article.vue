@@ -1,21 +1,26 @@
 <template lang="html">
     <div class="article-page">
         <v-about header-title="详情"></v-about>
-        <div class="article-content">
-            <div class="article-msg">
-                <div class="category-msg">
-                    <div class="category-title">{{dataList.title}}</div>
-                </div>
-                <div class="category-img"><img src="../assets/images/test.png" :alt="dataList.title"></div>
-            </div>
-            <div class="article-summary">
-                {{dataList.summary}}
-            </div>
-            <div class="article-info">
-                {{dataList.content}}
-            </div>
+        <div class="no" v-if="this.dataList==undefined">
+            <img src="../assets/images/no.png" alt="">
         </div>
-        <v-bottom></v-bottom>
+        <div  v-else>
+            <div class="article-content">
+                <div class="article-msg">
+                    <div class="category-msg">
+                        <div class="category-title">{{dataList.title}}</div>
+                    </div>
+                    <div class="category-img"><img :src="dataList.pic" :alt="dataList.title"></div>
+                </div>
+                <div class="article-summary">
+                    {{dataList.summary}}
+                </div>
+                <div class="article-info">
+                    {{dataList.content}}
+                </div>
+            </div>
+            <v-bottom></v-bottom>
+        </div>
     </div>
 
 </template>
@@ -28,17 +33,30 @@ export default {
         vAbout,
         vBottom
     },
+    created(){   
+        this.getArticleDetail()
+    },
     data() {
         return {
-            dataList: {
-            'title': "简介",
-            'author': "Yuan",
-            'pic': "src/assets/images/test.png",
-            'summary': "<p>本文不是官方文档的翻译。你可以在阅读官方文档之前和之后阅读本文，以加深其中的重点概念。根据该项目源码的习惯，示例都是基于 ES2015 的语法来写的。Redux 应用状态管理服务。虽然本身受到了 Flux 很深的影响，但是其核心概念却非常简单，就是 Map/Reduce 中的 Reduce。我们看一下 Javascript 中 Array.prototype.reduce 的用法：</p>",
-            'content': "<p>本文不是官方文档的翻译。你可以在阅读官方文档之前和之后阅读本文，以加深其中的重点概念。根据该项目源码的习惯，示例都是基于 ES2015 的语法来写的。Redux 是应用状态管理服务。虽然本身受到了 Flux 很深的影响，但是其核心概念却非常简单，就是 Map/Reduce 中的 Reduce。我们看一下 Javascript 中 Array.prototype.reduce 的用法：本文不是官方文档的翻译。你可以在阅读官方文档之前和之后阅读本文，以加深其中的重点概念。根据该项目源码的习惯，示例都是基于 ES2015 的语法来写的。Redux 是应用状态管理服务。虽然本身受到了 Flux 很深的影响，但是其核心概念却非常简单，就是 Map/Reduce 中的 Reduce。我们看一下 Javascript 中 Array.prototype.reduce 的用法：本文不是官方文档的翻译。你可以在阅读官方文档之前和之后阅读本文，以加深其中的重点概念。根据该项目源码的习惯，示例都是基于 ES2015 的语法来写的。Redux 是应用状态管理服务。虽然本身受到了 Flux 很深的影响，但是其核心概念却非常简单，就是 Map/Reduce 中的 Reduce。我们看一下 Javascript 中 Array.prototype.reduce 的用法：<p>"
-
-            }  
+            article_id:'',
+            dataList: {}  
         }     
+    },
+    methods:{
+        getArticleDetail() {
+            let article_id = this.$route.params.article_id
+            this.$http.get('/api/article_msg/'+ article_id)
+                .then((res)=>{
+                    if(res.status===200){
+                        this.dataList = res.data[0]
+                    }else {
+                        this.$Message.error('文章详情获取失败')
+                    }
+                },(err)=>{
+                    this.$Message.error('文章详情获取失败')
+                    console.log(err)
+                })
+        }
     }
 }
 </script>
@@ -46,6 +64,11 @@ export default {
 <style lang="less" >
     .article-page {
         width: 100%;
+        .no { 
+            img{
+                width: 92%;
+            }
+        }
         .article-title {
             height: 50px;
             background: #428DFF;

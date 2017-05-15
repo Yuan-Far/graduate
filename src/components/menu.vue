@@ -97,6 +97,10 @@ export default {
                 'icon': 'fa-file-text-o',
                 'label': '我的文章'
             }, {
+                'link': '/aboutList',
+                'icon': 'fa-reorder',
+                'label': '我的文集'
+            }, {
                 'link': '/aboutBug',
                 'icon': 'fa-bug',
                 'label': '意见反馈'

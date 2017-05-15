@@ -1,6 +1,6 @@
 <template lang="html">
 <div class="article">
-    <v-header></v-header>
+    <!-- <v-header></v-header> -->
     <v-about header-title="我的文章"></v-about>
     <router-link to="/addArticle">
         <div class="article-create">
@@ -8,7 +8,16 @@
         </div>
     </router-link>
     <div class="article-list-info">
-        
+        <ul>
+            <li class="list-article">
+                <div class="article-list-left">
+                    <p class="article-title">test document</p>
+                </div>
+                <div class="article-list-right">
+                    <!-- <img :src="item.pic" :alt="item.title"> -->
+                </div>
+            </li>
+        </ul>
     </div>
 </div>
 </template>
@@ -20,6 +29,11 @@ export default {
     components: {
         vAbout,
         vHeader
+    },
+    data() {
+        return {
+            dataList: []
+        }
     }
 }
 </script>
@@ -27,7 +41,7 @@ export default {
 <style lang="less">
 .article-create {
     position: fixed;
-    bottom: 75px;
+    bottom: 25px;
     right: 25px;
     width: 60px;
     height: 60px;

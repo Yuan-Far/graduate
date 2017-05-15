@@ -3,9 +3,9 @@
         <v-about  header-title="全站文集"></v-about>
         <v-header></v-header>
         <!-- <router-link to="/addCategory"> -->
-            <div class="article-create">
+            <!-- <div class="article-create">
                 <i class="ivu-icon ivu-icon-plus" @click="modal = true"></i>
-            </div>
+            </div> -->
         <!-- </router-link> -->
         <Modal
             v-model="modal"
@@ -26,7 +26,7 @@
         </Modal>
         <ul class="sort-content">
             <li class="sort-list" v-for="item in dataList">
-                <router-link to="/article">
+                <router-link :to="{ path: '/categoryarticle/' + item.category_id}">
                     <div class="sort-hack">
                         <div class="sort-img"><img :src="item.pic" :alt="item.title"></div>
                         <div class="sort-msg">
@@ -47,9 +47,16 @@
 <script>
 import vAbout from './about/aboutHeader.vue'
 import vHeader from './header.vue'
+import jwt from 'jwt-decode'
 export default {
     name:'v-sort',
     created() {
+        const userInfo = this.getUserInfo()
+        if(userInfo != null){
+            this.user_id = userInfo.id
+        }else {
+            this.user_id = '';
+        }
         this.getCategoryList()
     },
     components: {
@@ -61,7 +68,8 @@ export default {
             'modal': false,
             'category_title': '',
             'upload_img': '',
-            dataList: {
+            'user_id': '',
+            'dataList': {
                 'title': "Code",
                 'dataList': []
             }  
@@ -75,7 +83,8 @@ export default {
             // this.$Message.info('创建成功');
             let obj = {
                 title: this.category_title,
-                pic: this.upload_img
+                pic: this.upload_img,
+                user_id: this.user_id
             }
             this.$http.post('/api/create_category', obj)
                 .then((res)=>{
@@ -90,6 +99,17 @@ export default {
         },
         cancel () {
             this.$Message.info('取消创建');
+        },
+        getUserInfo() {
+            const token = window.sessionStorage.getItem('Yuan-Token')
+            // console.log(token)
+            if(token !=null && token!='null'){
+                const decode = jwt(token);
+                // console.log(decode)
+                return decode;
+            }else {
+                return null
+            }
         },
         getCategoryList() {
             this.$http.get('/api/category_info')

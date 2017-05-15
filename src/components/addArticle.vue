@@ -10,6 +10,13 @@
 	            </div>
 	        </div>
     	</div>
+    	<!-- <Modal
+            v-model="modal"
+            @on-ok="ok"
+            @on-cancel="cancel"
+            title="新建文集">
+            <input class="sort-name" v-model="category_title" type="text" placeholder="请输入文集名">
+        </Modal> -->
     	<div class="addInfoTitle">
     		<input type="text" placeholder="请输入标题" v-model="article_name">
     	</div>
@@ -17,25 +24,53 @@
     </div>
 </template>
 <script type="text/javascript">
+import jwt from 'jwt-decode'
 export default {
+	 created(){
+        const userInfo = this.getUserInfo()
+        if(userInfo != null){
+            this.user_id = userInfo.id
+            this.author = userInfo.author
+        }else {
+            this.user_id = ''
+            this.author = ''
+        }
+    },
     data() {
     	return {
+    		modal: false,
     		content: '',
     		article_name:'',
     		pic: '',
-    		author: ''
+    		author: '',
+    		user_id: ''
     	}
     },
     methods: {
         back() {
             history.go(-1)
         },
+        getUserInfo() {
+            const token = window.sessionStorage.getItem('Yuan-Token')
+            // console.log(token)
+            if(token !=null && token!='null'){
+                const decode = jwt(token);
+                // console.log(decode)
+                return decode;
+            }else {
+                return null
+            }
+        },
+        toCategory() {
+
+        },
         release() {
         	let obj = {
         		title: this.article_name,
         		pic: this.pic,
         		content: this.content,
-        		author: this.author
+        		author: this.author,
+        		user_id: this.user_id
         	}
         	this.$http.post('/api/create_article', obj)
                 .then((res)=>{

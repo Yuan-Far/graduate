@@ -28,19 +28,19 @@
         
         <ul class="article-info-list">
             <li class="article-info" v-for="item in dataList">
-                <router-link to="/article">
+                <router-link :to="{ path: '/article/'+item.article_id }">
                     <div class="article-userinfo">
                         <div class="article-author">
                             <span>{{item.author}}</span>
                         </div>
                         <div class="article-category">
-                            <span> {{item.category}} </span>
+                            <!-- <span> {{item.category}} </span> -->
                         </div>
                     </div>
                     <div class="article-msg">
                         <div class="article-title">{{item.title}}</div>
                         <div class="article-summary">{{item.summary}}</div>
-                        <div class="article-img"><img src="../assets/images/code_icon.png" :alt="item.title"></div>
+                        <div class="article-img"><img :src="item.pic" :alt="item.title"></div>
                     </div>
                 </router-link>
             </li>
@@ -56,19 +56,38 @@ export default {
     },
     created() {
         this.getArticleList()
+        this.getCategoryTitle()
     },
     data(){
         return {
             value:0,
-            dataList: []
+            dataList: [],
+            title:''
         }
     },
     methods: {
+        getCategoryTitle(){
+            
+            this.$http.get('/api/category_msg'+ category_id)
+                .then((res)=>{
+                    if(res.status==200){
+                        this.title = res.data.title
+
+                        console.log(this.title)
+                    }else {
+                        this.$Message.error('获取信息失败')
+                    }
+                },(err)=>{
+                    this.$Message.error('获取信息失败')
+                    console.log(err)
+                })
+        },
         getArticleList() {
             this.$http.get('/api/article_info')
                 .then((res)=>{
                     if(res.status==200){
                         this.dataList = res.data
+                        // console.log(res.data)
                     }else {
                         this.$Message.error('获取信息失败')
                     }

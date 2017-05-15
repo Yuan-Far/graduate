@@ -14,6 +14,7 @@ import register from '../components/register.vue'
 import Article from '../components/article.vue'
 import Sort from '../components/sort.vue'
 import addArticle from '../components/addArticle.vue'
+import categoryArticle from '../components/categoryarticle.vue'
 
 export default [{
     path: '/',
@@ -26,6 +27,9 @@ export default [{
     path: '/category',
     component: Category
 }, {
+    path: '/categoryarticle/:category_id',
+    component: categoryArticle
+}, {
     path: '/addArticle',
     component: addArticle
 }, {
@@ -35,7 +39,7 @@ export default [{
     path: '/sort',
     component: Sort
 }, {
-    path: '/article',
+    path: '/article/:article_id',
     component: Article
 }, {
     path: '/about',

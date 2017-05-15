@@ -25,9 +25,6 @@ export default {
                 'link': '/sort',
                 'icon': 'fa-home'
             }, {
-                'link': '/aboutArticle',
-                'icon': 'fa-paper-plane'
-            }, {
                 'link': '/about',
                 'icon': 'fa-user'
             }],
@@ -115,7 +112,7 @@ show {
 .list {
     display: inline-block;
     vertical-align: middle;
-    width: 24%;
+    width: 32%;
     padding: 0 .5%;
 }
 .list i {
