@@ -101,10 +101,6 @@ export default {
                 'icon': 'fa-reorder',
                 'label': '我的文集'
             }, {
-                'link': '/aboutBug',
-                'icon': 'fa-bug',
-                'label': '意见反馈'
-            }, {
                 'link': '/aboutInfo',
                 'icon': 'fa-info-circle',
                 'label': '关于'

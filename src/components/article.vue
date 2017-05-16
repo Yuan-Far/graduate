@@ -19,7 +19,7 @@
                     {{dataList.content}}
                 </div>
             </div>
-            <v-bottom></v-bottom>
+            <v-bottom :article-info="dataList.article_id"></v-bottom>
         </div>
     </div>
 
