@@ -14,7 +14,7 @@
     <div class="no" v-show="dataList.length<0">
         <img src="/assets/images/no.png" alt="">
     </div>
-    <ul class="user_category_list" >  
+    <ul class="user_category_list" style="margin-top: 50px;">  
         <li class="user_list" v-for="item in dataList">
             <router-link :to="{ path: '/categoryarticle/' + item.category_id}">
                 <div class="user-list-left">
@@ -30,6 +30,11 @@
                     </div>
                 </div>
             </router-link>
+                <div class="article-icon">
+                    <i class="ivu-icon ivu-icon-edit" @click="modal =true"></i>
+                    <i class="ivu-icon ivu-icon-trash-a" @click="del(item.category_id)"></i>
+                </div>
+            
         </li>
     </ul>
     <Modal
@@ -48,6 +53,21 @@
             </div>
         </Upload> -->
         <input class="sort-name" v-model="category_title" type="text" placeholder="请输入文集名">
+    </Modal>
+    <Modal 
+        v-model="modal1"
+        width="360">
+        <p slot="header" style="color:#f60;text-align:center">
+            <Icon type="information-circled"></Icon>
+            <span>删除确认</span>
+        </p>
+        <div style="text-align:center">
+            <p>此文集删除后，将无法恢复</p>
+            <p>是否继续删除？</p>
+        </div>
+        <div slot="footer">
+            <Button type="error" size="large" long :loading="modal_loading" @click="del">删除</Button>
+        </div>
     </Modal>
     <!-- <div class="article-create">
         <i class="ivu-icon ivu-icon-plus"></i>
@@ -76,6 +96,8 @@ export default {
     data(){
         return {
             'modal': false,
+            'modal1': false,
+            'modal_loading': false,
             'dataList': [],
             'category_title': '',
             'upload_img': '',
@@ -85,6 +107,32 @@ export default {
     },
 
     methods: {
+        del (category_id) {
+            // this.modal_loading = true;
+            // setTimeout(() => {
+            //     this.modal_loading = false;
+            //     this.modal2 = false;
+            //     this.$Message.success('删除成功');
+            // }, 2000);
+            this.$http.delete('/api/del_category/'+category_id)
+                .then((res)=>{
+                    if(res.data.code===1) {
+                        this.$Message.success('删除成功');
+                    }
+                },(err)=>{
+                    this.$Message.error('删除失败');
+                })
+        },
+        // edit(category_id) {
+        //     this.$http.put('/api/edit_category/'+category_id)
+        //         .then((res)=>{
+        //             if(res.data.code===1) {
+        //                 this.$Message.success(更新成功');
+        //             }
+        //         },(err)=>{
+        //             this.$Message.error('更新失败');
+        //         })
+        // },
         back() {
             history.go(-1)
         },
@@ -210,38 +258,60 @@ export default {
         border-bottom: 1px solid #eee;
         width: 100%;
         height: 70px;
+        display: flex;
+        justify-content:space-between;
         // line-height: 70px;
         padding: 10px;
-        .user-list-left {
-            float: left;
-            line-height: 50px;
-            width: 50px;
-            height: 50px;
-            background: #eee;
-            overflow: hidden;
-            padding: 10px 0;
-            margin-left:15px;
-            margin-right:15px;
-            i{
-                font-size: 28px;
-                color: #999;
-            }
-        }
-        .user-list-right {
-            overflow:hidden;
-            text-align: left;
-            p {
-                color: #000;
-                font-size: 18px;
-            }
-            .user-list-other {
-                line-height: 40px;
-                div{
-                    display: inline-block;
-                    margin-right:25px;
+        a{
+            display: flex;
+            justify-content: flex-start;
+            .user-list-left {
+                // float: left;
+                line-height: 50px;
+                width: 130px;
+                height: 50px;
+                background: #eee;
+                overflow: hidden;
+                padding: 10px 0;
+                margin-left:15px;
+                margin-right:15px;
+                i{
+                    font-size: 28px;
+                    color: #999;
                 }
             }
+            .user-list-right {
+                // overflow:hidden;
+                text-align: left;
+                margin-right: 40%;
+                p {
+                    color: #000;
+                    font-size: 18px;
+                }
+                .user-list-other {
+                    line-height: 40px;
+                    div{
+                        display: inline-block;
+                        margin-right:25px;
+                    }
+                }
+            }
+
         }
+        
+    }
+}
+.article-icon {
+
+    display:inline-block;
+    line-height: 70px;
+    display: flex;
+    width: 20%;
+    justify-content:space-between; 
+    float: right;
+    i{
+        padding:0 5px;
+        font-size: 20px;
     }
 }
 .sort-name {

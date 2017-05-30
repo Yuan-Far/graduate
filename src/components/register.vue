@@ -1,6 +1,6 @@
 <template lang="html">
     <div class="login_page">
-        <div class="close_icon"><i class="fa fa-remove" aria-hidden="true"></i></div>
+        <div class="close_icon"><i class="fa fa-remove" aria-hidden="true" @click="back()"></i></div>
         <div class="login_wrapper">
 			<img src="../assets/images/ico.png">
 		</div>
@@ -37,6 +37,9 @@ export default {
 		}
 	},
 	methods: {
+		back() {
+            history.go(-1)
+        },
 		reg() {
 			let data = {
 				username: this.username,

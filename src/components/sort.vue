@@ -27,7 +27,7 @@
         <ul class="sort-content">
             <li class="sort-list" v-for="item in dataList">
                 <router-link :to="{ path: '/categoryarticle/' + item.category_id}">
-                    <div class="sort-hack">
+                    <div class="sort-hack" style="width: 100%;">
                         <div class="sort-img"><img :src="item.pic" :alt="item.title"></div>
                         <div class="sort-msg">
                             <p>{{item.title}}</p>

@@ -1,10 +1,11 @@
 <template lang="html">
     <div class="article-page">
         <v-about header-title="详情"></v-about>
+        <Back-top :bottom="60"></Back-top>
         <div class="no" v-if="this.dataList==undefined">
             <img src="../assets/images/no.png" alt="">
         </div>
-        <div  v-else>
+        <div class="_hack_artile"  v-else>
             <div class="article-content">
                 <div class="article-msg">
                     <div class="category-msg">
@@ -15,12 +16,14 @@
                 <div class="article-summary">
                     {{dataList.summary}}
                 </div>
-                <div class="article-info">
-                    {{dataList.content}}
+                <div class="article-info" v-html="dataList.content">
+                    
                 </div>
             </div>
-            <v-bottom :article-info="dataList.article_id"></v-bottom>
+            <div>--end--</div>
+            <v-bottom :article-info="dataList.article_id" :article-title="dataList.title"></v-bottom>
         </div>
+
     </div>
 
 </template>
@@ -43,6 +46,11 @@ export default {
         }     
     },
     methods:{
+        unescape(str) {
+            var elem = document.createElement('div')
+            elem.innerHTML = str
+            return elem.innerText || elem.textContent
+        },
         getArticleDetail() {
             let article_id = this.$route.params.article_id
             this.$http.get('/api/article_msg/'+ article_id)
@@ -92,6 +100,8 @@ export default {
             width: 92%;
             margin: 1rem auto;
             color: #222;
+            padding-bottom:25px;
+            border-bottom: 1px solid #eee;
             .article-msg {
                 position: relative;
                 .category-msg {
@@ -118,7 +128,16 @@ export default {
                 font-size: 16px;
                 background-color: #f1f1f1;
             }
+            .article-info{
+                font-size:16px;
+                text-align: left;
+                text-indent: 2em;
+            }
         }
+        
+    }
+    ._hack_artile {
+        margin-bottom:50px;
         
     }
 </style>

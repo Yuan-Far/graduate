@@ -25,6 +25,9 @@ export default {
                 'link': '/sort',
                 'icon': 'fa-home'
             }, {
+                'link': '/category',
+                'icon': 'fa-paper-plane'
+            }, {
                 'link': '/about',
                 'icon': 'fa-user'
             }],
@@ -92,6 +95,7 @@ show {
     border-top: 1px solid #eee;
 }
 .nav {
+    z-index: 999;
     border: none;
     height: 50px;
     background: #fff;
@@ -112,7 +116,7 @@ show {
 .list {
     display: inline-block;
     vertical-align: middle;
-    width: 32%;
+    width: 24%;
     padding: 0 .5%;
 }
 .list i {

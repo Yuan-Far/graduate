@@ -178,8 +178,8 @@ export default {
             }
             this.$http.get('/auth/user/'+ obj.user_id)
                 .then((res)=>{
-                    if(res.status==200){
-                        this.dataList = res.data
+                    if(res.data.code===1){
+                        this.dataList = res.data.data
                         console.log(this.dataList.username)
                     }else {
                         this.$Message.error('获取信息失败')

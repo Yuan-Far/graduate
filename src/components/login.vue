@@ -18,12 +18,17 @@
 		<div id="button" @click="login">
 			登录
 		</div>
-		<div class="auth_login">
+		<div class="auth_register">
+			<div class="github_register">
+				<router-link to="/reg">没有账号？</router-link>
+			</div>
+		</div>
+		<!-- <div class="auth_login">
 			<p>——————————————————————</p>
 			<div class="github_login">
 				<i class="fa fa-github"></i>
 			</div>
-		</div>
+		</div> -->
 		<div class="bug_feedback">
 			<router-link to="/feedback">登陆遇到问题？</router-link>
 		</div>
@@ -100,6 +105,9 @@ export default {
 			color: #999;
 		}
 	}
+}
+.auth_register {
+	margin-top: 15px;
 }
 .login_wrapper{
 	margin: 25% 0 15% 0;

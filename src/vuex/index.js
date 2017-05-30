@@ -6,6 +6,7 @@ Vue.use(Vuex);
 const state = {
     'menuShow': false,
     'showClass': false,
+    'categoryClass': true,
     'auth': false
 }
 const mutations = {
@@ -14,6 +15,9 @@ const mutations = {
     },
     [types.UPDATE_CLASSSHOW](state) {
         state.showClass = !state.showClass;
+    },
+    [types.UPDATE_CATEGORYSHOW](state) {
+        state.categoryClass = !state.categoryClass;
     }
 }
 export default new Vuex.Store({

@@ -100,9 +100,6 @@ export default {
 		height:80px;
 		float: left;
 	}
-	p{
-
-	}
 }
 .sort-content-0{
 	margin-top:100px;

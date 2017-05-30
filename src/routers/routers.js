@@ -15,6 +15,7 @@ import Article from '../components/article.vue'
 import Sort from '../components/sort.vue'
 import addArticle from '../components/addArticle.vue'
 import categoryArticle from '../components/categoryarticle.vue'
+import userList from '../components/userlist.vue'
 
 export default [{
     path: '/',
@@ -24,11 +25,17 @@ export default [{
     path: '/home',
     component: Home
 }, {
+    path: '/userlist/:user_id',
+    component: userList
+}, {
     path: '/category',
     component: Category
 }, {
     path: '/categoryarticle/:category_id',
     component: categoryArticle
+}, {
+    path: '/addArticle/:id',
+    component: addArticle
 }, {
     path: '/addArticle',
     component: addArticle

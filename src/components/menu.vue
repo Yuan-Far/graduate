@@ -8,7 +8,7 @@
             <router-link to="/personInfo">
                 <div class="login_module">
                     <div class="login_left">
-                        <img src="../assets/images/pic.jpg">
+                        <img :src="list.pic">
                     </div>
                     <div class="login_middle">
                         <p>{{username}}</p>
@@ -54,11 +54,9 @@
             </div>
         </div> -->
         <div class="mask _mask2">
-            <router-link to="/logout">
-                <div class="logout">
-                    退出登录
-                </div>
-            </router-link>
+            <div class="logout" @click="logout">
+                退出登录
+            </div>
         </div>
         <div class="copyright">
             <span>Version 0.0.1</span>
@@ -75,12 +73,13 @@ export default {
     created(){
         const userInfo = this.getUserInfo()
         if(userInfo != null){
-            this.id = userInfo.id;
+            this.user_id = userInfo.id;
             this.username = userInfo.name
         }else {
-            this.id = '';
+            this.user_id = '';
             this.username = '';
         }
+        this.getInfo()
     },
     components: {
         vHeader
@@ -88,6 +87,8 @@ export default {
     data() {
         return {
             username:'',
+            list: {},
+            user_id: '',
             dataAbout: [{
                 'link': '/aboutCollection',
                 'icon': 'fa-heart',
@@ -101,19 +102,35 @@ export default {
                 'icon': 'fa-reorder',
                 'label': '我的文集'
             }, {
+                'link': '/aboutBug',
+                'icon': 'fa-bug',
+                'label': 'Bug反馈'
+            }, {
                 'link': '/aboutInfo',
                 'icon': 'fa-info-circle',
                 'label': '关于'
-            }, {
-                'link': '/aboutShare',
-                'icon': 'fa-share-alt',
-                'label': '分享'
             }]
         }
     },
     methods: {
         isShow() {
             this.$store.commit('UPDATE_MENUSHOW');
+        },
+        logout() {
+            this.$http.post('/auth/logout')
+                .then((res)=>{
+                    if(res.data.code===1){
+                        window.sessionStorage.removeItem('Yuan-Token')
+                        this.$Message.info('退出登陆成功');
+                        this.$router.push('/login')
+                    }else{
+                        this.$Message.error('退出登陆失败')
+                    }
+                },(err)=> {
+                    this.$Message.error('Err')
+                })
+            
+            
         },
         getUserInfo() {
             const token = window.sessionStorage.getItem('Yuan-Token')
@@ -125,6 +142,20 @@ export default {
             }else {
                 return null
             }
+        },
+        getInfo() {
+             this.$http.get('/auth/user/'+this.user_id)
+                .then((res)=>{
+                    if(res.data.code==1){
+                        this.list = res.data.data
+                        this.$Message.info('用户信息获取成功')
+                    }else {
+                        this.$Message.error('用户信息获取失败')
+                    }
+                },(err)=>{
+                    this.$Message.error('用户信息获取失败')
+                    console.log(err)
+                })
         }
     },
     computed: {

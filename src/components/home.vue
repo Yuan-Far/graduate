@@ -3,40 +3,29 @@
         <v-header></v-header>
         <div class="slide-pic">
             <Carousel autoplay v-model="value">
-                <Carousel-item>
-                    <div class="demo-carousel">
-                        <img src="../assets/images/1.jpg" alt="">
-                    </div>
-                </Carousel-item>
-                <Carousel-item>
-                    <div class="demo-carousel">
-                        <img src="../assets/images/2.jpg" alt="">
-                    </div>
-                </Carousel-item>
-                <Carousel-item>
-                    <div class="demo-carousel">
-                        <img src="../assets/images/3.jpg" alt="">
-                    </div>
-                </Carousel-item>
-                <Carousel-item>
-                    <div class="demo-carousel">
-                        <img src="../assets/images/4.jpg" alt="">
-                    </div>
+                <Carousel-item v-for="item in dataListFive">
+                    <router-link :to="{ path: '/article/'+item.article_id }">
+                        <div class="demo-carousel">
+                            <img :src="item.pic" :alt="item.title">
+                        </div>
+                    </router-link>
                 </Carousel-item>
             </Carousel>
         </div>
         
         <ul class="article-info-list">
             <li class="article-info" v-for="item in dataList">
-                <router-link :to="{ path: '/article/'+item.article_id }">
-                    <div class="article-userinfo">
+                <div class="article-userinfo">
+                    <router-link :to="{ path: '/userlist/' +user_id}">
                         <div class="article-author">
                             <span>{{item.author}}</span>
                         </div>
-                        <div class="article-category">
-                            <!-- <span> {{item.category}} </span> -->
-                        </div>
+                    </router-link>
+                    <div class="article-category">
+                        <!-- <span> {{item.category}} </span> -->
                     </div>
+                </div>
+                <router-link :to="{ path: '/article/'+item.article_id }">
                     <div class="article-msg">
                         <div class="article-title">{{item.title}}</div>
                         <div class="article-summary">{{item.summary}}</div>
@@ -50,19 +39,30 @@
 
 <script>
 import vHeader from './header.vue'
+import jwt from 'jwt-decode'
 export default {
     components: {
         vHeader
     },
     created() {
+        const userInfo = this.getUserInfo()
+        if(userInfo != null){
+            this.user_id = userInfo.id;
+            this.username = userInfo.name;
+        }else {
+            this.user_id = '';
+            this.username = '';
+        }
         this.getArticleList()
-        // this.getCategoryTitle()
+        this.getArticleFive()
     },
     data(){
         return {
             value:0,
+            dataListFive: [],
             dataList: [],
-            title:''
+            title:'',
+            user_id: ''
         }
     },
     methods: {
@@ -82,11 +82,36 @@ export default {
         //             console.log(err)
         //         })
         // },
+        getUserInfo() {
+            const token = window.sessionStorage.getItem('Yuan-Token')
+            // console.log(token)
+            if(token !=null && token!='null'){
+                const decode = jwt(token)
+                console.log(decode)
+                return decode;
+            }else {
+                return null
+            }
+        },
         getArticleList() {
             this.$http.get('/api/article_info')
                 .then((res)=>{
                     if(res.status==200){
                         this.dataList = res.data
+                        console.log(res.dataList)
+                    }else {
+                        this.$Message.error('获取信息失败')
+                    }
+                },(err)=>{
+                    this.$Message.error('获取信息失败')
+                    console.log(err)
+                })
+        },
+        getArticleFive() {
+            this.$http.get('/api/article_five')
+                .then((res)=>{
+                    if(res.status==200){
+                        this.dataListFive = res.data.data
                         // console.log(res.data)
                     }else {
                         this.$Message.error('获取信息失败')

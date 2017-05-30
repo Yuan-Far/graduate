@@ -6,6 +6,8 @@ import store from './vuex'
 import iView from 'iView'
 // import jwt from 'jsonwebtoken'
 import VueHtml5Editor from 'vue-html5-editor'
+import moment from "moment";
+import VueMomentJS from "vue-momentjs";
 
 import './assets/css/font-awesome.css'
 import './assets/css/reset.css'
@@ -17,6 +19,7 @@ import routes from './routers/routers'
 Vue.use(VueRouter)
 Vue.use(iView)
 Vue.use(VueHtml5Editor);
+Vue.use(VueMomentJS, moment);
 Vue.prototype.$http = Axios
 
 

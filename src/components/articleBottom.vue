@@ -5,7 +5,7 @@
         	<i class="fa fa-tasks fa-fw"></i>
         </div>
         <div class="bottom-like">
-        	<span>喜欢 {{dataList.count}}</span>
+        	<span>喜欢 {{count}}</span>
         </div>
     </div>
 </template>
@@ -13,13 +13,16 @@
 import { mapState } from 'vuex'
 import jwt from 'jwt-decode'
 	export default {
-		props: ['articleInfo'],
+		props: ['articleInfo','articleTitle'],
 		data () {
 			return {
 				'iconTrue': 'fa-heart',
 				'iconFalse': 'fa-heart-o',
 				'user_id': '',
-				dataList: {
+				'favor':'',
+				'info':'',
+				'count':'',
+				'dataList': {
 					'count': 44
 				}
 			}
@@ -33,20 +36,58 @@ import jwt from 'jwt-decode'
 	            this.user_id = '';
 	            this.username = '';
 	        }
+	        this.getCollectionInfo()
+	        this.getCount()
 	    },
 		methods: {
+			getCollectionInfo() {
+				let obj = {
+					article_id: this.$route.params.article_id
+				}
+	            this.$http.get('/api/collection_info/'+obj.article_id)
+	                .then((res)=>{
+	                    if(res.data.code==1){
+	                        this.favor = res.data
+	                        // console.log(res.data)
+	                        this.$Message.info('文章信息获取成功')
+	                    }else {
+	                        this.$Message.error('文章信息获取失败')
+	                    }
+	                },(err)=>{
+	                    this.$Message.error('文章信息获取失败')
+	                    console.log(err)
+	                })
+			},
+			getCount(){
+				let obj = {
+					user_id: this.user_id
+				}
+	            this.$http.get('/api/collection_user/'+obj.user_id)
+	                .then((res)=>{
+	                    if(res.data.code==1){
+	                        this.count = res.data.result.length
+	                        // console.log(res.data.result)
+	                        this.$Message.info('文章信息获取成功')
+	                    }else {
+	                        this.$Message.error('文章信息获取失败')
+	                    }
+	                },(err)=>{
+	                    this.$Message.error('文章信息获取失败')
+	                    console.log(err)
+	                })
+			},
 			isShow () {
 				this.$store.commit('UPDATE_CLASSSHOW');
-				// console.log(this.showClass)
 				if(this.showClass){
 					console.log(this.articleInfo)
 					let obj = {
 						user_id: this.user_id,
-						article_id: this.articleInfo
+						article_id: this.articleInfo,
+						title: this.articleTitle
 					}
 		            this.$http.post('/api/collection_article', obj)
 		                .then((res)=>{
-		                    if(res.status===200){
+		                    if(res.data.code===1){
 		                        this.dataList = res.data
 		                        console.log(this.dataList)
 		                        this.$Message.info('文章收藏成功')
@@ -60,11 +101,11 @@ import jwt from 'jwt-decode'
 				} else{
 					let obj = {
 						user_id: this.user_id,
-						article_id: this.article_id
+						article_id: this.articleInfo
 					}
 		            this.$http.delete('/api/cancel_article/'+obj.user_id+'/'+obj.article_id)
 		                .then((res)=>{
-		                    if(res.status===200){
+		                    if(res.data.code===1){
 		                        this.dataList = res.data[0]
 		                        this.$Message.info('取消收藏成功')
 		                    }else {
@@ -79,7 +120,6 @@ import jwt from 'jwt-decode'
 
 			getUserInfo() {
 	            const token = window.sessionStorage.getItem('Yuan-Token')
-	            // console.log(token)
 	            if(token !=null && token!='null'){
 	                const decode = jwt(token);
 	                // console.log(decode)
